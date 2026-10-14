@@ -1,1 +1,754 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>HEYWOOO LOVELLYLYL</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Fredoka -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Fredoka', cursive, sans-serif;
+            background: #080b12;
+            overflow: hidden;
+            touch-action: manipulation;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        /* 3D Perspective Stage */
+        .perspective-stage {
+            perspective: 1400px;
+            perspective-origin: 50% 50%;
+        }
+
+        /* Ultra-smooth Card Flip styling */
+        .page-card {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            transition: transform 0.75s cubic-bezier(0.34, 1.25, 0.64, 1), opacity 0.6s ease, filter 0.6s ease;
+            transform-style: preserve-3d;
+            transform-origin: 50% 100%;
+            will-change: transform, opacity;
+        }
+
+        /* Smooth Flip States */
+        .page-active {
+            transform: rotateX(0deg) translate3d(0, 0, 0);
+            z-index: 30;
+            opacity: 1;
+            filter: blur(0px);
+            pointer-events: auto;
+        }
+
+        .page-flipped-prev {
+            transform: rotateX(100deg) translate3d(0, -50px, -80px);
+            z-index: 10;
+            opacity: 0;
+            filter: blur(3px);
+            pointer-events: none;
+        }
+
+        .page-hidden-next {
+            transform: rotateX(-100deg) translate3d(0, 50px, -80px);
+            z-index: 10;
+            opacity: 0;
+            filter: blur(3px);
+            pointer-events: none;
+        }
+
+        /* Floating & Breathing Animations for Emojis */
+        @keyframes floatPlead {
+            0%, 100% { transform: translateY(0px) scale(1) rotate(0deg); filter: drop-shadow(0 20px 30px rgba(255, 105, 180, 0.5)); }
+            50% { transform: translateY(-12px) scale(1.04) rotate(-1.5deg); filter: drop-shadow(0 30px 45px rgba(255, 182, 193, 0.75)); }
+        }
+
+        @keyframes floatCry {
+            0%, 100% { transform: translateY(0px) scale(1) rotate(0deg); filter: drop-shadow(0 20px 30px rgba(59, 130, 246, 0.5)); }
+            25% { transform: translateY(-8px) scale(1.02) rotate(1deg); }
+            50% { transform: translateY(3px) scale(0.98) rotate(-1deg); }
+            75% { transform: translateY(-5px) scale(1.01) rotate(0.5deg); }
+        }
+
+        @keyframes floatKiss {
+            0%, 100% { transform: translateY(0px) scale(1) rotate(0deg); filter: drop-shadow(0 20px 30px rgba(244, 63, 94, 0.5)); }
+            30% { transform: translateY(-10px) scale(1.05) rotate(-2deg); }
+            60% { transform: translateY(4px) scale(0.97) rotate(2deg); }
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { text-shadow: 0 0 15px rgba(255,255,255,0.9), 0 0 35px rgba(255,105,180,0.8); }
+            50% { text-shadow: 0 0 25px rgba(255,255,255,1), 0 0 50px rgba(255,182,193,1); }
+        }
+
+        .animate-pleading-emoji { animation: floatPlead 3.5s ease-in-out infinite; }
+        .animate-crying-emoji { animation: floatCry 2.2s ease-in-out infinite; }
+        .animate-kissing-emoji { animation: floatKiss 2.8s ease-in-out infinite; }
+
+        .glowing-title { animation: pulseGlow 2.5s ease-in-out infinite; }
+
+        /* Glass Themes */
+        .glass-p1 {
+            background: linear-gradient(145deg, rgba(255, 182, 193, 0.92) 0%, rgba(255, 128, 160, 0.92) 50%, rgba(220, 160, 220, 0.92) 100%);
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(255, 255, 255, 0.75);
+            box-shadow: 0 20px 50px rgba(255, 105, 180, 0.35);
+        }
+
+        .glass-p2 {
+            background: linear-gradient(145deg, rgba(20, 24, 55, 0.95) 0%, rgba(12, 18, 38, 0.96) 50%, rgba(55, 20, 78, 0.95) 100%);
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(147, 197, 253, 0.35);
+            box-shadow: 0 20px 50px rgba(59, 130, 246, 0.35);
+        }
+
+        .glass-p3 {
+            background: linear-gradient(145deg, rgba(255, 130, 165, 0.93) 0%, rgba(255, 80, 130, 0.93) 50%, rgba(180, 110, 255, 0.93) 100%);
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(255, 255, 255, 0.75);
+            box-shadow: 0 20px 50px rgba(244, 63, 94, 0.4);
+        }
+
+        @keyframes modalPop {
+            from { opacity: 0; transform: scale(0.85); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .animate-modal { animation: modalPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+    </style>
+</head>
+<body class="w-screen h-screen flex items-center justify-center m-0 p-0 overflow-hidden bg-slate-950">
+
+    <!-- Foreground Heart & Hug Burst Overlay (Always on top) -->
+    <div id="foregroundOverlay" class="fixed inset-0 pointer-events-none overflow-hidden z-[200]"></div>
+
+    <!-- Persistent Background Audio element -->
+    <audio id="spotifyAudio" src="song.mp3" preload="auto" loop></audio>
+
+    <!-- Main Mobile Stage Container -->
+    <div class="w-full h-full max-w-md max-h-[920px] relative z-10 perspective-stage p-3 sm:p-4">
+
+        <!-- ================= PAGE 1: PLEADING / BEGGING EMOJI 🥺 ================= -->
+        <div id="page1" class="page-card page-active rounded-[38px] overflow-hidden glass-p1 flex flex-col justify-between items-center p-6">
+            
+            <!-- Top Navigation -->
+            <div class="w-full flex justify-between items-center z-20 pt-1">
+                <span class="text-xs font-bold text-pink-700 bg-white/70 px-3.5 py-1.5 rounded-full border border-white/60 shadow-sm">✨ Page 1/3</span>
+                <button onclick="goToPage(2)" class="flex items-center space-x-2 bg-white/90 hover:bg-white text-pink-600 font-extrabold text-sm px-4 py-2 rounded-full shadow-md active:scale-95 transition border border-pink-200 cursor-pointer">
+                    <span>Next</span>
+                    <i class="fa-solid fa-arrow-right animate-pulse"></i>
+                </button>
+            </div>
+
+            <!-- Page 1 Main Content -->
+            <div class="flex flex-col items-center justify-center flex-grow w-full text-center my-auto space-y-6">
+                <h1 class="text-3xl sm:text-4xl font-extrabold text-white glowing-title tracking-wide uppercase drop-shadow-md">
+                    HEYWOOO <br><span class="text-pink-600 text-4xl sm:text-5xl">LOVELLYLYL</span> ✨
+                </h1>
+
+                <!-- Native High-Res Emoji 🥺 with Floating Hearts -->
+                <div class="relative flex items-center justify-center my-4">
+                    <div class="absolute w-60 h-60 rounded-full bg-pink-300/40 blur-2xl animate-pulse"></div>
+                    
+                    <div id="pleadingEmoji" onclick="triggerBurst(event)" class="relative animate-pleading-emoji cursor-pointer transition-transform duration-200 flex items-center justify-center">
+                        <span class="text-[120px] sm:text-[145px] leading-none select-none filter drop-shadow-2xl transform hover:scale-105 transition-transform">🥺</span>
+
+                        <!-- 3 Floating Sticker Hearts -->
+                        <div class="absolute -bottom-1 -left-4 animate-bounce text-3xl sm:text-4xl" style="animation-duration: 2.2s;">❤️</div>
+                        <div class="absolute -top-3 -right-4 animate-pulse text-3xl sm:text-4xl" style="animation-duration: 1.8s;">💖</div>
+                        <div class="absolute bottom-8 -right-6 animate-bounce text-2xl sm:text-3xl" style="animation-duration: 2.6s;">💕</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Page 1 Bottom Button -->
+            <div class="w-full z-20 pb-2">
+                <button onclick="sendHuggiesAndKissies()" class="w-full py-4 bg-gradient-to-r from-pink-500 via-rose-500 to-purple-600 text-white font-bold rounded-2xl shadow-lg active:scale-95 transition flex items-center justify-center space-x-2 border border-white/40 cursor-pointer">
+                    <i class="fa-solid fa-heart text-xl text-pink-200 animate-bounce"></i>
+                    <span class="text-lg">Huggies & Kissies 💖</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- ================= PAGE 2: CRYING EMOJI 😭 ================= -->
+        <div id="page2" class="page-card page-hidden-next rounded-[38px] overflow-hidden glass-p2 flex flex-col justify-between items-center p-5 text-white">
+            
+            <!-- Top Nav & Spotify Widget -->
+            <div class="w-full flex flex-col space-y-2.5 z-20 pt-1">
+                <div class="w-full flex justify-between items-center">
+                    <button onclick="goToPage(1)" class="flex items-center space-x-1.5 bg-white/10 text-blue-200 font-bold text-xs px-3 py-1.5 rounded-full backdrop-blur-md border border-white/10 active:scale-95 transition cursor-pointer">
+                        <i class="fa-solid fa-arrow-left"></i>
+                        <span>Back</span>
+                    </button>
+                    <span class="text-xs text-blue-300 font-semibold">Page 2/3</span>
+                    <button onclick="goToPage(3)" class="flex items-center space-x-1.5 bg-blue-500 hover:bg-blue-400 text-white font-extrabold text-xs px-3.5 py-1.5 rounded-full shadow-md active:scale-95 transition cursor-pointer">
+                        <span>Next</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+
+                <!-- Spotify Player Bar -->
+                <div class="spotify-widget-box w-full bg-black/60 backdrop-blur-xl border border-white/10 rounded-2xl p-3 shadow-2xl flex flex-col space-y-2">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <div class="relative w-10 h-10 rounded-lg bg-gradient-to-br from-indigo-500 via-purple-600 to-pink-500 flex items-center justify-center shadow-md overflow-hidden flex-shrink-0">
+                                <i class="fa-solid fa-music text-white text-xs"></i>
+                                <div class="discSpinner absolute inset-0 border-2 border-white/30 rounded-full animate-spin" style="animation-duration: 4s; display: none;"></div>
+                            </div>
+                            <div class="flex flex-col text-left">
+                                <div class="flex items-center space-x-1">
+                                    <i class="fa-brands fa-spotify text-emerald-400 text-[10px]"></i>
+                                    <span class="text-[9px] text-emerald-400 font-bold uppercase tracking-wider">Spotify</span>
+                                </div>
+                                <span class="text-xs font-bold text-white truncate max-w-[170px]">stop crying your heart out</span>
+                                <span class="text-[10px] text-gray-400">Oasis</span>
+                            </div>
+                        </div>
+
+                        <button onclick="toggleAudio()" class="playPauseBtn w-9 h-9 bg-emerald-500 hover:bg-emerald-400 text-black rounded-full flex items-center justify-center shadow-md active:scale-90 transition cursor-pointer">
+                            <i class="playIcon fa-solid fa-play text-xs ml-0.5"></i>
+                        </button>
+                    </div>
+
+                    <div class="w-full flex items-center space-x-2 pt-0.5">
+                        <span class="currentTimeEl text-[9px] text-gray-400 w-7 text-right">0:00</span>
+                        <input type="range" class="seekBar w-full h-1 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-emerald-400" value="0" min="0" max="100" oninput="seekAudio(this.value)">
+                        <span class="durationTimeEl text-[9px] text-gray-400 w-7">0:00</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Page 2 Content -->
+            <div class="flex flex-col items-center justify-center flex-grow w-full text-center my-auto space-y-4 py-2">
+                <h2 class="text-xl sm:text-2xl font-extrabold text-blue-100 tracking-wide uppercase leading-tight">
+                    I LOVEEE YOUU SMMM <br><span class="text-blue-400 text-2xl sm:text-3xl">DONTTT CRYY PLSLLS BROOO</span> 😭
+                </h2>
+
+                <!-- Native High-Res Emoji 😭 -->
+                <div class="relative flex items-center justify-center my-2">
+                    <div class="absolute w-52 h-52 rounded-full bg-blue-500/20 blur-xl animate-pulse"></div>
+
+                    <div class="relative animate-crying-emoji flex items-center justify-center">
+                        <span class="text-[120px] sm:text-[145px] leading-none select-none filter drop-shadow-2xl">😭</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Page 2 Bottom Button -->
+            <div class="w-full z-20 pb-2">
+                <button onclick="openMessagePopup()" class="w-full py-3.5 bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 text-white font-bold rounded-2xl shadow-xl active:scale-95 transition flex items-center justify-center space-x-2 border border-white/30 cursor-pointer">
+                    <i class="fa-solid fa-envelope-open-text text-xl text-cyan-200"></i>
+                    <span class="text-base sm:text-lg">Read Out Message</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- ================= PAGE 3: KISSING EMOJI 😘 ================= -->
+        <div id="page3" class="page-card page-hidden-next rounded-[38px] overflow-hidden glass-p3 flex flex-col justify-between items-center p-5 text-white">
+            
+            <!-- Top Nav & Spotify Widget -->
+            <div class="w-full flex flex-col space-y-2.5 z-20 pt-1">
+                <div class="w-full flex justify-between items-center">
+                    <button onclick="goToPage(2)" class="flex items-center space-x-1.5 bg-white/20 text-white font-bold text-xs px-3 py-1.5 rounded-full backdrop-blur-md border border-white/20 active:scale-95 transition cursor-pointer">
+                        <i class="fa-solid fa-arrow-left"></i>
+                        <span>Back</span>
+                    </button>
+                    <span class="text-xs font-bold text-pink-100 bg-white/20 px-3 py-1 rounded-full">Page 3/3</span>
+                </div>
+
+                <!-- Spotify Player Bar Container -->
+                <div class="spotify-widget-box w-full bg-black/60 backdrop-blur-xl border border-white/10 rounded-2xl p-3 shadow-2xl flex flex-col space-y-2">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <div class="relative w-10 h-10 rounded-lg bg-gradient-to-br from-indigo-500 via-purple-600 to-pink-500 flex items-center justify-center shadow-md overflow-hidden flex-shrink-0">
+                                <i class="fa-solid fa-music text-white text-xs"></i>
+                                <div class="discSpinner absolute inset-0 border-2 border-white/30 rounded-full animate-spin" style="animation-duration: 4s; display: none;"></div>
+                            </div>
+                            <div class="flex flex-col text-left">
+                                <div class="flex items-center space-x-1">
+                                    <i class="fa-brands fa-spotify text-emerald-400 text-[10px]"></i>
+                                    <span class="text-[9px] text-emerald-400 font-bold uppercase tracking-wider">Spotify</span>
+                                </div>
+                                <span class="text-xs font-bold text-white truncate max-w-[170px]">stop crying your heart out</span>
+                                <span class="text-[10px] text-gray-400">Oasis</span>
+                            </div>
+                        </div>
+
+                        <button onclick="toggleAudio()" class="playPauseBtn w-9 h-9 bg-emerald-500 hover:bg-emerald-400 text-black rounded-full flex items-center justify-center shadow-md active:scale-90 transition cursor-pointer">
+                            <i class="playIcon fa-solid fa-play text-xs ml-0.5"></i>
+                        </button>
+                    </div>
+
+                    <div class="w-full flex items-center space-x-2 pt-0.5">
+                        <span class="currentTimeEl text-[9px] text-gray-400 w-7 text-right">0:00</span>
+                        <input type="range" class="seekBar w-full h-1 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-emerald-400" value="0" min="0" max="100" oninput="seekAudio(this.value)">
+                        <span class="durationTimeEl text-[9px] text-gray-400 w-7">0:00</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Page 3 Content -->
+            <div class="flex flex-col items-center justify-center flex-grow w-full text-center my-auto space-y-4 py-2">
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-white glowing-title tracking-wide uppercase">
+                    LOVEEE YOUU SMM BROO 😘
+                </h2>
+
+                <!-- Native High-Res Emoji 😘 -->
+                <div class="relative flex items-center justify-center my-2">
+                    <div class="absolute w-52 h-52 rounded-full bg-pink-400/30 blur-xl animate-pulse"></div>
+
+                    <div class="relative animate-kissing-emoji flex items-center justify-center">
+                        <span class="text-[120px] sm:text-[145px] leading-none select-none filter drop-shadow-2xl">😘</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Page 3 Bottom Button -->
+            <div class="w-full z-20 pb-2">
+                <button onclick="launchLoveGame()" class="w-full py-4 bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-600 text-white font-extrabold rounded-2xl shadow-xl active:scale-95 transition flex items-center justify-center space-x-2 border border-white/40 cursor-pointer">
+                    <i class="fa-solid fa-gamepad text-2xl text-yellow-200 animate-bounce"></i>
+                    <span class="text-lg">Play ma love game heheheheh</span>
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ================= DINO LOVE GAME OVERLAY ================= -->
+    <div id="gameOverlay" class="fixed inset-0 bg-slate-950/95 backdrop-blur-lg z-[300] hidden flex-col items-center justify-between p-4 transition-all duration-300">
+        
+        <!-- Game Header -->
+        <div class="w-full max-w-md flex justify-between items-center pt-2 px-2 z-10">
+            <button onclick="closeLoveGame()" class="bg-white/10 hover:bg-white/20 text-white font-bold text-xs px-3.5 py-2 rounded-full border border-white/20 active:scale-95 transition cursor-pointer">
+                <i class="fa-solid fa-xmark mr-1"></i> Exit Game
+            </button>
+            <div class="flex items-center space-x-2">
+                <span class="text-xs text-pink-300 font-bold bg-pink-950/60 px-3.5 py-1.5 rounded-full border border-pink-500/30">Target: 1000 ❤️</span>
+            </div>
+        </div>
+
+        <!-- Canvas Container -->
+        <div class="w-full max-w-md flex-grow flex flex-col items-center justify-center relative my-2">
+            
+            <!-- Score Toast Message Banner -->
+            <div id="gameToast" class="absolute top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-pink-500 to-purple-600 text-white text-xs sm:text-sm font-extrabold px-5 py-2.5 rounded-full shadow-2xl border border-white/40 transition-all duration-500 opacity-0 transform -translate-y-4 pointer-events-none z-30 text-center whitespace-nowrap">
+                i love youu smmmmm
+            </div>
+
+            <canvas id="dinoCanvas" class="w-full h-80 rounded-3xl border-2 border-pink-400/30 shadow-2xl cursor-pointer bg-slate-900"></canvas>
+            <p class="text-xs text-pink-200/80 font-medium mt-3 animate-pulse">Tap screen or press Space / Up to jump!</p>
+        </div>
+
+        <!-- Start Overlay -->
+        <div id="gameStartScreen" class="absolute inset-0 z-40 flex flex-col items-center justify-center bg-black/85 backdrop-blur-md p-6 text-center text-white space-y-4">
+            <div class="w-16 h-16 bg-pink-500 rounded-full flex items-center justify-center text-3xl shadow-xl border-2 border-white animate-bounce">
+                🩷
+            </div>
+            <h3 class="text-2xl font-extrabold text-pink-300">Dino Love Game!</h3>
+            <p class="text-xs text-gray-300 max-w-xs leading-relaxed">Jump over grouped "SAD" obstacles like Chrome Dino! Collect messages every 100 score and reach 1000 to win!</p>
+            <button onclick="startGame()" class="px-8 py-3.5 bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-extrabold rounded-2xl shadow-xl transform active:scale-95 transition border border-white/30 text-base cursor-pointer">
+                Start Jumping! 🚀
+            </button>
+        </div>
+
+        <!-- Game Win Overlay -->
+        <div id="gameWinScreen" class="absolute inset-0 z-50 hidden flex-col items-center justify-center bg-black/90 backdrop-blur-lg p-6 text-center text-white space-y-5">
+            <div class="w-20 h-20 bg-gradient-to-tr from-yellow-400 to-pink-500 rounded-full flex items-center justify-center text-4xl shadow-2xl border-4 border-white animate-pulse">
+                👑
+            </div>
+            <h2 class="text-2xl font-extrabold text-yellow-300 tracking-wider">YOU WIN MY LOVE! 🎉</h2>
+            <div class="w-full max-w-xs bg-white/10 border border-white/20 rounded-2xl p-4 text-sm leading-relaxed text-pink-100 font-bold shadow-inner">
+                YOPUUU WINNN MY LOVEEE BE HAPPPPYPY HOPEE THIS MADE U HAPPPY BRORO AND FEELIN A BIT BETTER I LOVEEE YOUUU TAKE CARTE BROOO.
+            </div>
+            <button onclick="startGame()" class="px-8 py-3.5 bg-gradient-to-r from-emerald-400 to-teal-500 text-black font-extrabold rounded-2xl shadow-xl active:scale-95 transition text-base cursor-pointer">
+                Play Again 🔄
+            </button>
+        </div>
+
+    </div>
+
+    <!-- ================= MESSAGE POPUP MODAL (PAGE 2) ================= -->
+    <div id="messageModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-[250] hidden items-center justify-center p-4">
+        <div class="w-full max-w-sm bg-gradient-to-b from-slate-900 via-indigo-950 to-slate-900 border-2 border-pink-400/50 rounded-3xl p-6 text-white shadow-2xl relative animate-modal flex flex-col items-center text-center space-y-4">
+            <div class="w-14 h-14 bg-gradient-to-tr from-pink-500 to-purple-500 rounded-full flex items-center justify-center text-2xl shadow-lg border-2 border-white/60 -mt-10">
+                💌
+            </div>
+            <h3 class="text-xl font-extrabold text-pink-300 uppercase">Message For You</h3>
+            <div class="w-full bg-white/5 border border-white/10 rounded-2xl p-4 max-h-[280px] overflow-y-auto text-sm sm:text-base leading-relaxed text-pink-100 font-medium shadow-inner text-left">
+                I LOVEEE YOUUUU SMMMM BRORORO SOO SORRYY FOR EVERYTHING THATS BEEN HAPPENIGNGN BUT IM AKLWAYS HERE FOR U BROR AND ILL ALWAYS LOVE YOU SMM AND BE WITH YOU SOO MCUH BRORO ALWAYS JUST BEE HAPPPYY ADN KEEP FAITH IM HERE FOR U ON UR DARKEST OF DAYS MY LOVEEE.
+            </div>
+            <button onclick="closeMessagePopup()" class="w-full py-3 bg-gradient-to-r from-pink-500 to-rose-500 text-white font-extrabold rounded-xl shadow-lg active:scale-95 transition border border-white/30 cursor-pointer">
+                Close With Love ❤️
+            </button>
+        </div>
+    </div>
+
+    <!-- Application Script -->
+    <script>
+        let currentPage = 1;
+
+        // Navigation Switch
+        function goToPage(targetPage) {
+            if (targetPage === currentPage) return;
+
+            const p1 = document.getElementById('page1');
+            const p2 = document.getElementById('page2');
+            const p3 = document.getElementById('page3');
+            const pages = [p1, p2, p3];
+
+            pages.forEach((p, idx) => {
+                const pageNum = idx + 1;
+                p.className = 'page-card rounded-[38px] overflow-hidden flex flex-col justify-between items-center p-5 ';
+
+                if (pageNum === targetPage) {
+                    p.classList.add('page-active', pageNum === 1 ? 'glass-p1' : (pageNum === 2 ? 'glass-p2' : 'glass-p3'));
+                } else if (pageNum < targetPage) {
+                    p.classList.add('page-flipped-prev', pageNum === 1 ? 'glass-p1' : (pageNum === 2 ? 'glass-p2' : 'glass-p3'));
+                } else {
+                    p.classList.add('page-hidden-next', pageNum === 1 ? 'glass-p1' : (pageNum === 2 ? 'glass-p2' : 'glass-p3'));
+                }
+            });
+
+            currentPage = targetPage;
+
+            if ((currentPage === 2 || currentPage === 3) && audio.paused) {
+                playAudio();
+            }
+        }
+
+        // Burst Particle Effect
+        function triggerBurst(e) {
+            e.stopPropagation();
+            const emojiEl = document.getElementById('pleadingEmoji');
+            emojiEl.style.transform = "scale(1.15)";
+            setTimeout(() => emojiEl.style.transform = "scale(1)", 200);
+
+            const rect = emojiEl.getBoundingClientRect();
+            popBurst(rect.left + rect.width / 2, rect.top + rect.height / 2);
+        }
+
+        function sendHuggiesAndKissies() {
+            const emojiEl = document.getElementById('pleadingEmoji');
+            const rect = emojiEl.getBoundingClientRect();
+            const cx = rect.left + rect.width / 2;
+            const cy = rect.top + rect.height / 2;
+
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => popBurst(cx, cy), i * 45);
+            }
+        }
+
+        function popBurst(originX, originY) {
+            const overlay = document.getElementById('foregroundOverlay');
+            const items = ['🥰', '💖', '💋', '🫂', '💗', '✨', '💕', '💘'];
+            const p = document.createElement('div');
+            
+            p.innerHTML = items[Math.floor(Math.random() * items.length)];
+            p.style.position = 'fixed';
+            p.style.left = `${originX - 18}px`;
+            p.style.top = `${originY - 18}px`;
+            p.style.fontSize = `${Math.floor(Math.random() * 20) + 28}px`;
+            p.style.pointerEvents = 'none';
+            p.style.zIndex = '250';
+            p.style.transition = 'all 1.2s cubic-bezier(0.1, 1, 0.3, 1)';
+            
+            overlay.appendChild(p);
+
+            const angle = Math.random() * Math.PI * 2;
+            const dist = 110 + Math.random() * 160;
+            const tx = Math.cos(angle) * dist;
+            const ty = Math.sin(angle) * dist - 30;
+
+            requestAnimationFrame(() => {
+                p.style.transform = `translate(${tx}px, ${ty}px) rotate(${Math.random() * 360}deg) scale(1.5)`;
+                p.style.opacity = '0';
+            });
+
+            setTimeout(() => p.remove(), 1200);
+        }
+
+        // Spotify Audio Controls
+        const audio = document.getElementById('spotifyAudio');
+
+        function playAudio() {
+            audio.play().then(() => updatePlayState(true)).catch(() => updatePlayState(false));
+        }
+
+        function toggleAudio() {
+            if (audio.paused) playAudio();
+            else { audio.pause(); updatePlayState(false); }
+        }
+
+        function updatePlayState(isPlaying) {
+            document.querySelectorAll('.playIcon').forEach(icon => {
+                icon.className = isPlaying ? "fa-solid fa-pause text-xs" : "fa-solid fa-play text-xs ml-0.5";
+            });
+            document.querySelectorAll('.discSpinner').forEach(spinner => {
+                spinner.style.display = isPlaying ? "block" : "none";
+            });
+        }
+
+        audio.addEventListener('timeupdate', () => {
+            if (audio.duration) {
+                const progress = (audio.currentTime / audio.duration) * 100;
+                document.querySelectorAll('.seekBar').forEach(bar => bar.value = progress);
+                document.querySelectorAll('.currentTimeEl').forEach(el => el.textContent = formatTime(audio.currentTime));
+                document.querySelectorAll('.durationTimeEl').forEach(el => el.textContent = formatTime(audio.duration));
+            }
+        });
+
+        function seekAudio(val) {
+            if (audio.duration) audio.currentTime = (val / 100) * audio.duration;
+        }
+
+        function formatTime(s) {
+            const m = Math.floor(s / 60);
+            const sec = Math.floor(s % 60);
+            return `${m}:${sec < 10 ? '0' : ''}${sec}`;
+        }
+
+        // Message Popup
+        function openMessagePopup() {
+            const m = document.getElementById('messageModal');
+            m.classList.remove('hidden'); m.classList.add('flex');
+        }
+        function closeMessagePopup() {
+            const m = document.getElementById('messageModal');
+            m.classList.add('hidden'); m.classList.remove('flex');
+        }
+
+        // ================= DINO LOVE GAME LOGIC =================
+        const canvas = document.getElementById('dinoCanvas');
+        const ctx = canvas.getContext('2d');
+
+        let gameLoopId = null;
+        let score = 0;
+        let isGameRunning = false;
+
+        let player = {
+            x: 45,
+            y: 0,
+            size: 34,
+            vy: 0,
+            gravity: 0.55,
+            jumpPower: -11.5,
+            isGrounded: false
+        };
+
+        let obstacles = [];
+        let obstacleTimer = 0;
+        let dayNightCycle = 0;
+
+        const loveMessages = {
+            100: "i love youu smmmmmmm",
+            200: "always be happy bror",
+            300: "you mean sm rto me",
+            400: "youre everything to me",
+            500: "im always there for you broo",
+            600: "take care of yourself brooo ure so amaizngg",
+            700: "youre the most perfect bror u make me so happy",
+            800: "i need you too bror i miss you",
+            900: "i wanna be with u so bad"
+        };
+        let lastToastScore = 0;
+
+        function resizeCanvas() {
+            canvas.width = canvas.parentElement.clientWidth;
+            canvas.height = 320;
+            player.y = canvas.height - player.size - 30;
+        }
+
+        function launchLoveGame() {
+            document.getElementById('gameOverlay').classList.remove('hidden');
+            document.getElementById('gameOverlay').classList.add('flex');
+            document.getElementById('gameStartScreen').classList.remove('hidden');
+            document.getElementById('gameStartScreen').classList.add('flex');
+            document.getElementById('gameWinScreen').classList.add('hidden');
+            resizeCanvas();
+        }
+
+        function closeLoveGame() {
+            document.getElementById('gameOverlay').classList.add('hidden');
+            document.getElementById('gameOverlay').classList.remove('flex');
+            isGameRunning = false;
+            cancelAnimationFrame(gameLoopId);
+        }
+
+        function startGame() {
+            document.getElementById('gameStartScreen').classList.add('hidden');
+            document.getElementById('gameWinScreen').classList.add('hidden');
+            document.getElementById('gameWinScreen').classList.remove('flex');
+
+            resizeCanvas();
+            score = 0;
+            lastToastScore = 0;
+            player.y = canvas.height - player.size - 30;
+            player.vy = 0;
+            player.isGrounded = true;
+            obstacles = [];
+            obstacleTimer = 0;
+            isGameRunning = true;
+
+            cancelAnimationFrame(gameLoopId);
+            gameLoop();
+        }
+
+        function jump() {
+            if (!isGameRunning) return;
+            if (player.isGrounded) {
+                player.vy = player.jumpPower;
+                player.isGrounded = false;
+            }
+        }
+
+        window.addEventListener('keydown', (e) => {
+            if (e.code === 'Space' || e.code === 'ArrowUp') jump();
+        });
+        canvas.addEventListener('click', jump);
+        canvas.addEventListener('touchstart', (e) => { e.preventDefault(); jump(); });
+
+        function showGameToast(msg) {
+            const toast = document.getElementById('gameToast');
+            toast.textContent = msg;
+            toast.classList.remove('opacity-0', '-translate-y-4');
+            toast.classList.add('opacity-100', 'translate-y-0');
+
+            setTimeout(() => {
+                toast.classList.remove('opacity-100', 'translate-y-0');
+                toast.classList.add('opacity-0', '-translate-y-4');
+            }, 3000);
+        }
+
+        function gameLoop() {
+            if (!isGameRunning) return;
+
+            // Day / Night background transition
+            dayNightCycle += 0.0015;
+            const cycleVal = (Math.sin(dayNightCycle) + 1) / 2;
+            
+            const r = Math.floor(250 * (1 - cycleVal) + 15 * cycleVal);
+            const g = Math.floor(180 * (1 - cycleVal) + 23 * cycleVal);
+            const b = Math.floor(200 * (1 - cycleVal) + 45 * cycleVal);
+            ctx.fillStyle = `rgb(${r},${g},${b})`;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Ground Line
+            const groundY = canvas.height - 30;
+            ctx.fillStyle = "rgba(255, 255, 255, 0.3)";
+            ctx.fillRect(0, groundY, canvas.width, 30);
+
+            // Player Physics
+            player.vy += player.gravity;
+            player.y += player.vy;
+
+            if (player.y >= groundY - player.size) {
+                player.y = groundY - player.size;
+                player.vy = 0;
+                player.isGrounded = true;
+            }
+
+            // Draw Heart Player
+            ctx.font = `${player.size}px serif`;
+            ctx.fillText('🩷', player.x, player.y + player.size - 4);
+
+            // Obstacle Spawning
+            obstacleTimer++;
+            if (obstacleTimer > 100 + Math.random() * 50) {
+                obstacleTimer = 0;
+                
+                const groupType = Math.floor(Math.random() * 3);
+                let count = 1;
+                let height = 58;
+
+                if (groupType === 1) { count = 2; height = 58; }
+                else if (groupType === 2) { count = 1; height = 75; }
+
+                for (let c = 0; c < count; c++) {
+                    obstacles.push({
+                        x: canvas.width + (c * 26),
+                        y: groundY - height,
+                        width: 22,
+                        height: height,
+                        speed: 3.6 + (score / 250)
+                    });
+                }
+            }
+
+            // Render & Collision for Obstacles
+            for (let i = obstacles.length - 1; i >= 0; i--) {
+                const obs = obstacles[i];
+                obs.x -= obs.speed;
+
+                // Draw Cactus Pillar
+                ctx.fillStyle = "#e11d48";
+                ctx.beginPath();
+                ctx.roundRect(obs.x, obs.y, obs.width, obs.height, 6);
+                ctx.fill();
+                ctx.strokeStyle = "#ffffff";
+                ctx.lineWidth = 1.8;
+                ctx.stroke();
+
+                // Vertical "SAD" Letters
+                ctx.fillStyle = "#ffffff";
+                ctx.font = "bold 12px Fredoka, sans-serif";
+                ctx.textAlign = "center";
+                ctx.fillText("S", obs.x + obs.width / 2, obs.y + 16);
+                ctx.fillText("A", obs.x + obs.width / 2, obs.y + 32);
+                ctx.fillText("D", obs.x + obs.width / 2, obs.y + 48);
+                ctx.textAlign = "start";
+
+                // Collision Detection
+                if (
+                    player.x + player.size - 8 > obs.x &&
+                    player.x + 8 < obs.x + obs.width &&
+                    player.y + player.size - 4 > obs.y
+                ) {
+                    startGame();
+                    return;
+                }
+
+                if (obs.x + obs.width < 0) {
+                    obstacles.splice(i, 1);
+                }
+            }
+
+            score++;
+
+            // Score Display
+            ctx.fillStyle = "#ffffff";
+            ctx.font = "bold 18px Fredoka, sans-serif";
+            ctx.fillText(`Score: ${score}`, 16, 32);
+
+            // Toast Trigger Every 100 Score
+            const currentHundred = Math.floor(score / 100) * 100;
+            if (currentHundred > lastToastScore && loveMessages[currentHundred]) {
+                lastToastScore = currentHundred;
+                showGameToast(loveMessages[currentHundred]);
+            }
+
+            // Win Condition at 1000 Score
+            if (score >= 1000) {
+                isGameRunning = false;
+                document.getElementById('gameWinScreen').classList.remove('hidden');
+                document.getElementById('gameWinScreen').classList.add('flex');
+                return;
+            }
+
+            gameLoopId = requestAnimationFrame(gameLoop);
+        }
+
+        window.addEventListener('resize', () => {
+            if (isGameRunning) resizeCanvas();
+        });
+    </script>
+</body>
+</html>
